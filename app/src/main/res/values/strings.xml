@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Coursework</string>
+    <string-array name="difficulty_levels">
+        <item>Easy</item>
+        <item>Moderate</item>
+        <item>Difficult</item>
+    </string-array>
+    <string-array name="difficulty_array_filter">
+        <item>Any difficulty</item>
+        <item>Easy</item>
+        <item>Moderate</item>
+        <item>Difficult</item>
+    </string-array>
+
+    <!-- Dialogs -->
+    <string name="confirm_reset_title">Confirm Reset</string>
+    <string name="confirm_reset_message">Are you sure you want to delete all hikes?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="filter_hikes_title">Filter Hikes</string>
+    <string name="apply_filters">Apply Filters</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- Buttons -->
+    <string name="view_details">View Details</string>
+    
+    <!-- Placeholders & Formats -->
+    <string name="hike_name_placeholder">Hike Name</string>
+    <string name="location_placeholder">Location</string>
+    <string name="date_placeholder">Date</string>
+    <string name="length_format">%.1f km</string>
+    <string name="length_placeholder">10.5 km</string>
+    <string name="parking_available">Parking available</string>
+    <string name="difficulty_placeholder">Moderate</string>
+</resources>

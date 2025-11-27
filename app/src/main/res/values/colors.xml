@@ -1,5 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    
+    <!-- Nature Palette -->
+    <color name="primary_green">#2E7D32</color> <!-- Green 800 -->
+    <color name="primary_green_light">#4CAF50</color> <!-- Green 500 -->
+    <color name="primary_green_dark">#1B5E20</color> <!-- Green 900 -->
+    
+    <color name="secondary_amber">#FFC107</color> <!-- Amber 500 -->
+    <color name="secondary_orange">#FF9800</color> <!-- Orange 500 -->
+    
+    <color name="background_light">#F1F8E9</color> <!-- Light Green 50 -->
+    <color name="surface_white">#FFFFFF</color>
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    
+    <color name="error_red">#B00020</color>
 </resources>

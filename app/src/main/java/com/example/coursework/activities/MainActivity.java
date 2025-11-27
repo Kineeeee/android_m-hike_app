@@ -36,9 +36,13 @@ import java.util.List;
  */
 public class MainActivity extends AppCompatActivity implements HikeAdapter.OnHikeListener {
 
+    // UI Components
     private RecyclerView hikesRecyclerView;
     private Button addHikeButton, resetButton, filtersButton;
     private SearchView searchView;
+    private TextView emptyTextView; // TextView for empty state
+
+    // Data and Adapter
     private HikeAdapter hikeAdapter;
     private HikeDAO hikeDAO;
     private List<Hike> hikes;
@@ -56,12 +60,13 @@ public class MainActivity extends AppCompatActivity implements HikeAdapter.OnHik
         hikeDAO = new HikeDAO(this);
         hikeDAO.open();
 
-        // Initialize UI components.
+        // Initialize UI components by finding them in the layout
         hikesRecyclerView = findViewById(R.id.hikes_recycler_view);
         addHikeButton = findViewById(R.id.add_hike_button);
         resetButton = findViewById(R.id.reset_button);
         filtersButton = findViewById(R.id.filters_button);
         searchView = findViewById(R.id.search_view);
+        emptyTextView = findViewById(R.id.empty_text);
 
         // Set up the RecyclerView.
         hikesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -69,13 +74,10 @@ public class MainActivity extends AppCompatActivity implements HikeAdapter.OnHik
         // Load the list of hikes from the database.
         loadHikes();
 
-        // Set up the click listener for the "Add Hike" button.
-        addHikeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AddHikeActivity.class);
-                startActivityForResult(intent, ADD_HIKE_REQUEST);
-            }
+        // Set up the click listener for the "Add Hike" button to start AddHikeActivity.
+        addHikeButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, AddHikeActivity.class);
+            startActivityForResult(intent, ADD_HIKE_REQUEST);
         });
 
         // Set up the click listener for the "Reset" button.
@@ -85,28 +87,28 @@ public class MainActivity extends AppCompatActivity implements HikeAdapter.OnHik
                     .setMessage(getString(R.string.confirm_reset_message))
                     .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
                         hikeDAO.deleteAllHikes();
-                        loadHikes();
+                        loadHikes(); // Reload to show empty state
                     })
                     .setNegativeButton(getString(R.string.no), null)
                     .show();
         });
 
         // Set up the click listener for the "Filters" button.
-        filtersButton.setOnClickListener(v -> {
-            showFilterDialog();
-        });
+        filtersButton.setOnClickListener(v -> showFilterDialog());
 
         // Set up the search view for filtering hikes by name.
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                return false;
+                return false; // Not handling submit, filtering is real-time
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                // Filter hikes based on the search query
                 List<Hike> filteredHikes = hikeDAO.filterHikes(newText, null,null, null, null, null);
                 hikeAdapter.filterList(filteredHikes);
+                checkEmptyView(); // Check if the list is empty after filtering
                 return true;
             }
         });
@@ -121,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements HikeAdapter.OnHik
         View dialogView = inflater.inflate(R.layout.dialog_filter, null);
         builder.setView(dialogView);
 
+        // Initialize input fields from the dialog layout
         final TextInputEditText nameInput = dialogView.findViewById(R.id.filter_hike_name);
         final TextInputEditText locationInput = dialogView.findViewById(R.id.filter_location);
         final TextView dateInput = dialogView.findViewById(R.id.filter_date);
@@ -128,58 +131,54 @@ public class MainActivity extends AppCompatActivity implements HikeAdapter.OnHik
         final EditText minLengthInput = dialogView.findViewById(R.id.filter_min_length);
         final EditText maxLengthInput = dialogView.findViewById(R.id.filter_max_length);
 
-        dateInput.setOnClickListener(v -> {
-            showDatePickerDialog(dateInput);
-        });
+        // Set up date picker for the date field
+        dateInput.setOnClickListener(v -> showDatePickerDialog(dateInput));
 
+        // Set up the spinner for difficulty levels
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.difficulty_array_filter, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         difficultySpinner.setAdapter(adapter);
 
         builder.setTitle(getString(R.string.filter_hikes_title))
-                .setPositiveButton(getString(R.string.apply_filters), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        String name = nameInput.getText().toString();
-                        String location = locationInput.getText().toString();
-                        String date = dateInput.getText().toString().equals("Select date") ? null : dateInput.getText().toString();
-                        String difficulty = difficultySpinner.getSelectedItem().toString();
-                        Double minLength = !minLengthInput.getText().toString().isEmpty()
-                                ? Double.parseDouble(minLengthInput.getText().toString())
-                                : null;
-                        Double maxLength = !maxLengthInput.getText().toString().isEmpty()
-                                ? Double.parseDouble(maxLengthInput.getText().toString())
-                                : null;
+                .setPositiveButton(getString(R.string.apply_filters), (dialog, id) -> {
+                    // Get filter values from the input fields
+                    String name = nameInput.getText().toString();
+                    String location = locationInput.getText().toString();
+                    String date = dateInput.getText().toString().equals("Select date") ? null : dateInput.getText().toString();
+                    String difficulty = difficultySpinner.getSelectedItem().toString();
+                    Double minLength = !minLengthInput.getText().toString().isEmpty()
+                            ? Double.parseDouble(minLengthInput.getText().toString())
+                            : null;
+                    Double maxLength = !maxLengthInput.getText().toString().isEmpty()
+                            ? Double.parseDouble(maxLengthInput.getText().toString())
+                            : null;
 
-                        List<Hike> filteredHikes = hikeDAO.filterHikes(name, location, date, difficulty, minLength,
-                                maxLength);
-                        hikeAdapter.filterList(filteredHikes);
-                    }
+                    // Apply filters and update the adapter
+                    List<Hike> filteredHikes = hikeDAO.filterHikes(name, location, date, difficulty, minLength,
+                            maxLength);
+                    hikeAdapter.filterList(filteredHikes);
+                    checkEmptyView(); // Check if list is empty after filtering
                 })
-                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
+                .setNegativeButton(getString(R.string.cancel), (dialog, id) -> dialog.cancel());
 
         AlertDialog dialog = builder.create();
         dialog.show();
     }
 
+    /**
+     * Shows a DatePickerDialog to allow the user to select a date.
+     * @param dateView The TextView to update with the selected date.
+     */
     private void showDatePickerDialog(TextView dateView) {
         final Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
 
+        // Create and show the dialog
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        dateView.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
-                    }
-                }, year, month, day);
+                (view, year1, monthOfYear, dayOfMonth) -> dateView.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year1), year, month, day);
         datePickerDialog.show();
     }
 
@@ -191,6 +190,21 @@ public class MainActivity extends AppCompatActivity implements HikeAdapter.OnHik
         hikes = hikeDAO.getAllHikes();
         hikeAdapter = new HikeAdapter(hikes, this);
         hikesRecyclerView.setAdapter(hikeAdapter);
+        checkEmptyView(); // Check if the list is empty after loading
+    }
+
+    /**
+     * Toggles the visibility of the RecyclerView and the empty view TextView.
+     * Shows the empty view if the adapter has no items, otherwise shows the RecyclerView.
+     */
+    private void checkEmptyView() {
+        if (hikeAdapter.getItemCount() == 0) {
+            hikesRecyclerView.setVisibility(View.GONE);
+            emptyTextView.setVisibility(View.VISIBLE);
+        } else {
+            hikesRecyclerView.setVisibility(View.VISIBLE);
+            emptyTextView.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -222,8 +236,15 @@ public class MainActivity extends AppCompatActivity implements HikeAdapter.OnHik
     @Override
     public void onDeleteClick(int position) {
         Hike hikeToDelete = hikes.get(position);
-        hikeDAO.deleteHike(hikeToDelete.getId());
-        loadHikes(); // Reload the hikes to reflect the deletion.
+        new AlertDialog.Builder(MainActivity.this)
+                .setTitle(getString(R.string.confirm_delete_title))
+                .setMessage(getString(R.string.confirm_delete_message))
+                .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
+                    hikeDAO.deleteHike(hikeToDelete.getId());
+                    loadHikes(); // Reload the hikes to reflect the deletion.
+                })
+                .setNegativeButton(getString(R.string.no), null)
+                .show();
     }
 
     /**

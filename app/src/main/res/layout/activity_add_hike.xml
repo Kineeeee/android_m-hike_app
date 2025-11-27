@@ -1,102 +1,183 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:fitsSystemWindows="true"
+    android:fillViewport="true"
+    android:background="@color/background_light"
     tools:context=".AddHikeActivity">
 
-    <EditText
-        android:id="@+id/hike_name"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Name of the hike *" />
+        android:orientation="vertical"
+        android:padding="24dp">
 
-    <EditText
-        android:id="@+id/hike_location"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Location *" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="New Adventure"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="@color/primary_green"
+            android:layout_marginBottom="24dp"/>
 
-    <TextView
-        android:id="@+id/hike_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Select date *"
-        android:drawableLeft="@android:drawable/ic_menu_my_calendar"
-        android:drawablePadding="8dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:gravity="center_vertical"
-        android:padding="12dp"
-        style="@style/Widget.AppCompat.Spinner.Underlined" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Name of the hike *"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginBottom="16dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Parking available *" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/hike_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapWords"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <RadioGroup
-        android:id="@+id/parking_group"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Location *"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginBottom="16dp">
 
-        <RadioButton
-            android:id="@+id/parking_yes"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/hike_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapSentences"
+                android:drawableEnd="@drawable/ic_location"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Date of Hike *"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginBottom="16dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/hike_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:clickable="true"
+                android:drawableEnd="@drawable/ic_date"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Yes" />
+            android:text="Parking available *"
+            android:textColor="@color/text_secondary"
+            android:layout_marginBottom="8dp"/>
 
-        <RadioButton
-            android:id="@+id/parking_no"
+        <RadioGroup
+            android:id="@+id/parking_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <RadioButton
+                android:id="@+id/parking_yes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Yes"
+                android:layout_marginEnd="24dp"/>
+
+            <RadioButton
+                android:id="@+id/parking_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No" />
+        </RadioGroup>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Length of the hike (km) *"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginBottom="16dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/hike_length"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:drawableEnd="@drawable/ic_length"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No" />
-    </RadioGroup>
+            android:text="Difficulty Level *"
+            android:textColor="@color/text_secondary"
+            android:layout_marginBottom="8dp"/>
 
-    <EditText
-        android:id="@+id/hike_length"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Length of the hike *"
-        android:inputType="numberDecimal" />
+        <Spinner
+            android:id="@+id/hike_difficulty"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/spinner_background"
+            android:layout_marginBottom="16dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Difficulty *" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Description"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginBottom="16dp">
 
-    <Spinner
-        android:id="@+id/hike_difficulty"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <EditText
-        android:id="@+id/hike_description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Description" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/hike_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:minLines="3"
+                android:gravity="top"/>
+        </com.google.android.material.textfield.TextInputLayout>
         
-    <EditText
-        android:id="@+id/hike_weather"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Weather" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Weather"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginBottom="16dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/hike_weather"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapSentences"/>
+        </com.google.android.material.textfield.TextInputLayout>
         
-    <EditText
-        android:id="@+id/hike_recommended_gear"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Recommended Gear" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Recommended Gear"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginBottom="24dp">
 
-    <Button
-        android:id="@+id/save_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Save" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/hike_recommended_gear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:minLines="2"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-</LinearLayout>
+        <Button
+            android:id="@+id/save_button"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Save Hike"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:cornerRadius="8dp"/>
+
+    </LinearLayout>
+</ScrollView>

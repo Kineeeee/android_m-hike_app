@@ -100,7 +100,7 @@
                 <View
                     android:layout_width="4dp"
                     android:layout_height="4dp"
-                    android.background="@drawable/dot_separator"
+                    android:background="@drawable/dot_separator"
                     android:layout_marginHorizontal="8dp"/>
 
                 <ImageView

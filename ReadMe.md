@@ -14,7 +14,7 @@ M-hike is an Android application designed for hikers to manage their hiking adve
     *   **Edit Observation**: Modify existing observations.
     *   **Delete Observation**: Remove observations from the database.
 *   **Search**: Search for hikes by name.
-*   **Filter**: Filter hikes by difficulty.
+*   **Filter**: Filter hikes.
 *   **Database**: Uses SQLite (via `DatabaseHelper`) to store data locally.
 
 ## Tech Stack

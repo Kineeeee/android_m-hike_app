@@ -18,6 +18,7 @@
         android:id="@+id/observation_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:enabled="false"
         android:hint="Time of observation" />
 
     <EditText

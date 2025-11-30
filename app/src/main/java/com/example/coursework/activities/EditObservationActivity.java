@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -58,6 +59,17 @@ public class EditObservationActivity extends AppCompatActivity {
             observation.setObservation(observationText.getText().toString());
             observation.setTime(observationTime.getText().toString());
             observation.setComments(observationComments.getText().toString());
+
+
+            // Validate that all required fields are filled.
+            if (observationText.getText().toString().trim().isEmpty()
+                    || observationTime.getText().toString().trim().isEmpty()
+                    || observationComments.getText().toString().trim().isEmpty()) {
+
+                Toast.makeText(this, "Please fill in all required fields", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
 
             // Update the observation in the database.
             observationDAO.updateObservation(observation);

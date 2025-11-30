@@ -135,4 +135,11 @@ public class ObservationDAO {
         observation.setComments(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.KEY_OBSERVATION_COMMENTS)));
         return observation;
     }
+
+
+
+    // delete all observation
+    public void deleteAllObservations() {
+        database.delete(DatabaseHelper.TABLE_OBSERVATIONS, null, null);
+    }
 }

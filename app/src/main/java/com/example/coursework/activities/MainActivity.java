@@ -25,6 +25,7 @@ import com.example.coursework.R;
 import com.example.coursework.adapters.HikeAdapter;
 import com.example.coursework.data.models.Hike;
 import com.example.coursework.data.sqlite.HikeDAO;
+import com.example.coursework.data.sqlite.ObservationDAO;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Calendar;
@@ -45,6 +46,9 @@ public class MainActivity extends AppCompatActivity implements HikeAdapter.OnHik
     // Data and Adapter
     private HikeAdapter hikeAdapter;
     private HikeDAO hikeDAO;
+
+
+    private ObservationDAO observationDAO;
     private List<Hike> hikes;
 
     // Request codes for starting activities for result.
@@ -59,6 +63,10 @@ public class MainActivity extends AppCompatActivity implements HikeAdapter.OnHik
         // Initialize the database access object.
         hikeDAO = new HikeDAO(this);
         hikeDAO.open();
+
+        observationDAO = new ObservationDAO(this);
+        observationDAO.open();
+
 
         // Initialize UI components by finding them in the layout
         hikesRecyclerView = findViewById(R.id.hikes_recycler_view);
@@ -87,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements HikeAdapter.OnHik
                     .setMessage(getString(R.string.confirm_reset_message))
                     .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
                         hikeDAO.deleteAllHikes();
+                        observationDAO.deleteAllObservations();
                         loadHikes(); // Reload to show empty state
                     })
                     .setNegativeButton(getString(R.string.no), null)
@@ -265,5 +274,6 @@ public class MainActivity extends AppCompatActivity implements HikeAdapter.OnHik
     protected void onDestroy() {
         super.onDestroy();
         hikeDAO.close();
+        observationDAO.close();
     }
 }
